@@ -38,7 +38,7 @@ sub index :Path :Args(0) {
     my $book    = $reading->book;
 
     my $body = sprintf "You are currently reading %s by %s.<br />",
-      $book->title;
+      $book->title, $book->author;
 
     $body .= sprintf "It has %s pages.  You began on %s.<br /><br />",
       $book->pages, _dt($reading->started_at);
