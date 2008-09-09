@@ -30,8 +30,8 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key('id');
 
-__PACKAGE__->add_relationship('reading', 'Reading', {
-  'foreign.id' => 'self.reading_id',
-});
+__PACKAGE__->has_one(reading => 'BookBurner::Schema::Reading',
+  { 'foreign.id' => 'self.reading_id' },
+);
 
 1;

@@ -4,13 +4,19 @@ use strict;
 use base 'Catalyst::Model::DBIC::Schema';
 
 __PACKAGE__->config(
-    schema_class => 'BookBurner::Schema',
-    
+  schema_class => 'BookBurner::Schema',
+  connect_info => [
+    'dbi:SQLite:bb.sqlite',
+    undef,
+    undef,
+    { AutoCommit => 1 }
+  ]
 );
 
 =head1 NAME
 
 BookBurner::Web::Model::BBDB - Catalyst DBIC Schema Model
+
 =head1 SYNOPSIS
 
 See L<BookBurner::Web>

@@ -26,11 +26,33 @@ BookBurner::Web::Controller::Root - Root Controller for BookBurner::Web
 
 =cut
 
+sub _dt {
+  scalar localtime $_[0];
+}
+
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
     # Hello World
-    $c->response->body( $c->welcome_message );
+    my $reading = $c->model('BBDB::Reading')->search->next;
+    my $book    = $reading->book;
+
+    my $body = sprintf "You are currently reading %s by %s.<br />",
+      $book->title;
+
+    $body .= sprintf "It has %s pages.  You began on %s.<br /><br />",
+      $book->pages, _dt($reading->started_at);
+
+    my @updates = $reading->search_related(updates => {}, {
+      order_by => 'updated_at'
+    })->all;
+
+    for my $update (@updates) {
+      $body .= sprintf "By %s, you had read up to page %s.<br />",
+        _dt($update->updated_at), $update->new_position;
+    }
+
+    $c->response->body($body);
 }
 
 sub default :Path {

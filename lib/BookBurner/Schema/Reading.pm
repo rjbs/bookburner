@@ -25,12 +25,9 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key('id');
 
-__PACKAGE__->add_relationship('book', 'Book', {
-  'foreign.id' => 'self.book_id',
-});
-
-__PACKAGE__->add_relationship('updates', 'ReadingUpdate', {
-  'foreign.reading_id' => 'self.id',
-});
+__PACKAGE__->has_one(book => 'BookBurner::Schema::Book');
+__PACKAGE__->has_many(updates => 'BookBurner::Schema::ReadingUpdate',
+  { 'foreign.reading_id' => 'self.id' },
+);
 
 1;
