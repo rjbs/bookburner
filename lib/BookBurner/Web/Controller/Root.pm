@@ -47,10 +47,25 @@ sub index :Path :Args(0) {
       order_by => 'updated_at'
     })->all;
 
+    my @plot = [ 0, $book->pages ];
+
     for my $update (@updates) {
       $body .= sprintf "By %s, you had read up to page %s.<br />",
         _dt($update->updated_at), $update->new_position;
+
+      push @plot, [
+        ($update->updated_at - $reading->started_at) / 3_600,
+        $book->pages - $update->new_position
+      ];
     }
+
+    my $img = 'http://chart.apis.google.com/chart?cht=lxy&chs=400x200&chm=c,000000,0,0,10|c,000000,0,1,10|c,000000,0,2,10|c,000000,0,3,10&chxt=x,y&chd=t:'
+            . join(',', map { $_->[0] } @plot)
+            . '|'
+            . join(',', map { $_->[1] } @plot)
+            . '&chds=0,' . $book->pages;
+
+    $body .= "<img src='$img' style='float:left' />";
 
     $c->response->body($body);
 }
