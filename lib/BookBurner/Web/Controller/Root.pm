@@ -4,10 +4,10 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 
-#
+use Google::Chart;
+
 # Sets the actions in this controller to be registered with no prefix
 # so they function identically to actions created in MyApp.pm
-#
 __PACKAGE__->config->{namespace} = '';
 
 =head1 NAME
@@ -59,13 +59,19 @@ sub index :Path :Args(0) {
       ];
     }
 
-    my $img = 'http://chart.apis.google.com/chart?cht=lxy&chs=400x200&chm=c,000000,0,0,10|c,000000,0,1,10|c,000000,0,2,10|c,000000,0,3,10&chxt=x,y&chd=t:'
-            . join(',', map { $_->[0] } @plot)
-            . '|'
-            . join(',', map { $_->[1] } @plot)
-            . '&chds=0,' . $book->pages;
+    my $chart = Google::Chart->new(
+      type => 'Line',
+      data => [ 1, 2, 3, 4 ],
+      size => { args => {width => 400, height => 200 } },
+    );
 
-    $body .= "<img src='$img' style='float:left' />";
+    # my $img = 'http://chart.apis.google.com/chart?cht=lxy&chs=400x200&chm=c,000000,0,0,10|c,000000,0,1,10|c,000000,0,2,10|c,000000,0,3,10&chxt=x,y&chd=t:'
+    #         . join(',', map { $_->[0] } @plot)
+    #         . '|'
+    #         . join(',', map { $_->[1] } @plot)
+    #         . '&chds=0,' . $book->pages;
+
+    $body .= "<img src='$chart' style='float:left' />";
 
     $c->response->body($body);
 }
