@@ -36,7 +36,7 @@ __PACKAGE__->setup();
 
 =head1 NAME
 
-BookBurner::Web - Catalyst based application
+BookBurner::Web - burn-down charting of book reading
 
 =head1 SYNOPSIS
 
